@@ -7,6 +7,7 @@ if defined?(Mongoid) && ::Mongoid::VERSION =~ /^3(.*)/
 
     context "mongoize" do
       it "mongoizes correctly a Money object to a hash of cents and currency" do
+        priceable.reload
         priceable.price.cents.should == 100
         priceable.price.currency.should == Money::Currency.find('EUR')
       end

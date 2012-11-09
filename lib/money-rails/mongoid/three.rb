@@ -3,8 +3,8 @@ class Money
   # Converts an object of this instance into a database friendly value.
   def mongoize
     {
-      :cents        => cents,
-      :currency_iso => currency.iso_code
+      "cents"        => cents,
+      "currency_iso" => currency.iso_code
     }
   end
 
@@ -13,9 +13,8 @@ class Money
     # Get the object as it was stored in the database, and instantiate
     # this custom class from it.
     def demongoize(object)
-      if object.is_a?(Hash) && object.has_key?(:cents)
-        object = object.symbolize_keys
-        ::Money.new(object[:cents], object[:currency_iso])
+      if object.is_a?(Hash) && object.has_key?("cents")
+        ::Money.new(object["cents"], object["currency_iso"])
       else
         nil
       end
@@ -27,8 +26,7 @@ class Money
       case object
       when Money then object.mongoize
       when Hash then
-        object.symbolize_keys!
-        ::Money.new(object[:cents], object[:currency]).mongoize
+        ::Money.new(object["cents"], object["currency"]).mongoize
       else object
       end
     end
